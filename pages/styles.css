@@ -1,0 +1,15 @@
+/* styles.css */
+
+/* ここにCSSのスタイルを追加 */
+body {
+  font-family: 'Arial', sans-serif;
+}
+
+.pokemon-info {
+  border: 1px solid #ddd;
+  padding: 10px;
+  margin: 10px;
+}
+
+/* 他のスタイルを追加 */
+
