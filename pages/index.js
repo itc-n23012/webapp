@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { getPokemonById } from './pokedate'
-
+import { Pokedate, getPokemonById, getIdFromName } from './pokedate'
+import styles from '../styles/styles.module.css'
+import Nav from './link'
 const PokemonInfo = ({ id, title }) => {
   const [pokemonData, setPokemonData] = useState(null)
   const [data, setData] = useState(null)
-
   useEffect(() => {
     const fetchPokemonInfo = async () => {
       try {
@@ -12,7 +12,7 @@ const PokemonInfo = ({ id, title }) => {
         const data = await response.json()
         setPokemonData(data)
 
-        const pokemonInfo = await getPokemonById(pokemonId)
+        const pokemonInfo = getPokemonById(id)
         setData(pokemonInfo)
       } catch (error) {
         console.error('Error fetching Pokemon information:', error)
@@ -23,17 +23,22 @@ const PokemonInfo = ({ id, title }) => {
   }, [id])
 
   return (
-    <div>
-      <h2>{title}</h2>
+    <div className={styles.h2}>
       {pokemonData && (
         <div>
-          <p>Name: {pokemonData.name}</p>
-          <img src={pokemonData.sprites.front_default} alt={pokemonData.name} />
-          <p>Height: {pokemonData.height} decimetres</p>
-          <p>Weight: {pokemonData.weight} hectograms</p>
-          {data && (
+          <h2>名前: {data.name}</h2>
+          <h3>図鑑番号: {id}</h3>
+          <img
+            className={styles.img}
+            src={pokemonData.sprites.front_default}
+            alt={pokemonData.name}
+          />
+          <p>身長: {(pokemonData.height * 0.1).toFixed(1)} ｍ</p>
+          <p>体重: {(pokemonData.weight * 0.1).toFixed(1)} kg</p>
+          <p>タイプ1 : {data.type1}</p>
+          {data.type2 && (
             <div>
-              <p>type1 : {data.type1}</p>
+              <p>タイプ2 : {data.type2}</p>
             </div>
           )}
         </div>
@@ -43,31 +48,32 @@ const PokemonInfo = ({ id, title }) => {
 }
 
 const Home = () => {
-  const [pokemonId, setPokemonId] = useState('')
+  const [pId, setPokemonId] = useState('')
+  const pokemonId = getIdFromName(pId)
 
   const Search = () => {
-    const parsedId = parseInt(pokemonId)
-    if (!isNaN(parsedId) && parsedId > 0) {
-      setPokemonId(parsedId)
-      window.location.href = `/pokemon/${parsedId}`
+    const pokemonId = getIdFromName(pId)
+    if (pokemonId) {
+      setPokemonId(pokemonId)
+      window.location.href = `/pokemon/${pokemonId}`
     } else {
-      alert('Please enter a valid Pokemon ID.')
+      alert('Please enter a valid Pokemon name.')
     }
   }
 
   return (
-    <div>
+    <div className={styles.h2}>
       <h1>ポケモン 全国図鑑</h1>
       <div>
         <label>
-          図鑑番号:
+          <Nav />
+          名前:
           <input
             type='text'
-            value={pokemonId}
+            value={pId}
             onChange={e => setPokemonId(e.target.value)}
           />
         </label>
-        <button onClick={Search}>検索</button>
       </div>
       {pokemonId && (
         <PokemonInfo id={pokemonId} title={`Pokemon ${pokemonId}`} />

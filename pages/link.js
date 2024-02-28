@@ -15,7 +15,7 @@ const Nav = () => {
           <Link href='/index2'>番号検索</Link>
         </li>
         <li>
-          <Link href='/index3'>名前検索</Link>
+          <Link href='/'>名前検索</Link>
         </li>
       </ul>
     </div>
