@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Pokedate, getPokemonById, getIdFromName } from './pokedate'
+import { Pokedate, getPokemonById, getIdFromName } from '../public/pokedata.js'
 import styles from '../styles/styles.module.css'
 import Nav from './link'
 const PokemonInfo = ({ id, title }) => {
